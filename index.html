@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: #f0f2f5;
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .animated-img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .animate {
+            animation: fadeUp 0.8s forwards;
+        }
+
+        .text-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .text-span {
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        .final-image {
+            width: 100%;
+            height: auto;
+            margin-top: 30px;
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            .text-container {
+                font-size: 1.2rem;
+                padding: 20px;
+            }
+        }
+    </style>
+    <script>
+// 将以下代码添加到js入口函数内即可
+document.addEventListener('click', function() {
+    document.getElementById('audios').play()
+})
+</script>
+</head>
+<body>
+    <audio autoplay="autopaly" loop="loop" id="audios">
+    <source src="1.mp3" type="audio/mp3" />
+    </audio>
+    <div class="container">
+        <img src="1.jpg" class="animated-img" alt="顶部图片">
+        
+        <div class="text-container" id="text-container"></div>
+
+        <img id="finalImage" src="2.jpg" class="final-image" alt="底部图片" style="display: none;">
+    </div>
+
+    <script>
+        // 正文内容包含落款
+        const fullText = `“流水不争先，争的是滔滔不绝。”你已经勇敢地奔涌了那么长的旅程，无论几天后河流分岔向何方，你积蓄的力量，终将托起你人生的千重浪。18岁的遗憾终将在21岁被弥补，鱼总，鱼妹，鱼儿，鱼粥粥，小鱼饭馆，婷妹，我在肇庆等你的那顿饭，加油💪
+
+
+请查收你未来五月的录取通知书`;
+
+
+        const container = document.getElementById('text-container');
+        const topImage = document.querySelector('.animated-img');
+        const finalImage = document.getElementById('finalImage');
+        let delayCounter = 0;
+
+        // 同步启动图片和文字动画
+        function startAnimations() {
+            // 启动顶部图片动画
+            topImage.classList.add('animate');
+            
+            // 生成文字动画
+            fullText.split('\n').forEach(line => {
+                line.split('').forEach(char => {
+                    const span = document.createElement('span');
+                    span.className = 'text-span';
+                    span.textContent = char;
+                    span.style.animationDelay = `${delayCounter * 80}ms`;
+                    container.appendChild(span);
+                    delayCounter++;
+                });
+                // 处理换行
+                if(line !== fullText.split('\n').pop()) {
+                    container.appendChild(document.createElement('br'));
+                }
+            });
+
+            // 显示底部图片
+            setTimeout(() => {
+                finalImage.style.display = 'block';
+                setTimeout(() => {
+                    finalImage.style.animation = 'fadeUp 0.8s forwards';
+                }, 50);
+            }, delayCounter * 80 + 1000);
+        }
+
+        // 确保DOM加载后执行
+        document.addEventListener('DOMContentLoaded', startAnimations);
+    </script>
+</body>
+</html>
